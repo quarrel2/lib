@@ -1,10 +1,8 @@
---[[
-Octohook ui lib informant version
-Developed by liam#4567
-Edited by xz#1111
-]]
 
--- // Load
+getgenv().Config = {
+	Invite = "XzCc22xaqta",
+	Version = "2.0",
+}
 
 local startupArgs = ({...})[1] or {}
 
@@ -20,6 +18,7 @@ local function gs(a)
     return game:GetService(a)
 end
 
+
 -- // Variables
 local players, http, runservice, inputservice, tweenService, stats, actionservice = gs('Players'), gs('HttpService'), gs('RunService'), gs('UserInputService'), gs('TweenService'), gs('Stats'), gs('ContextActionService')
 local localplayer = players.LocalPlayer
@@ -29,7 +28,11 @@ local floor, ceil, huge, pi, clamp = math.floor, math.ceil, math.huge, math.pi, 
 local c3new, fromrgb, fromhsv = Color3.new, Color3.fromRGB, Color3.fromHSV
 local next, newInstance, newUDim2, newVector2 = next, Instance.new, UDim2.new, Vector2.new
 local isexecutorclosure = isexecutorclosure or is_synapse_function or is_sirhurt_closure or iskrnlclosure;
-local executor = identifyexecutor()
+local executor = (
+    syn and 'syn' or
+    getexecutorname and getexecutorname() or
+    'unknown'
+)
 
 local library = {
     windows = {};
@@ -51,10 +54,6 @@ local library = {
         ['watermark'] = 1300;
         ['notification'] = 1400;
     },
-    stats = {
-        ['fps'] = 0;
-        ['ping'] = 0;
-    };
     images = {
         ['gradientp90'] = 'https://raw.githubusercontent.com/portallol/luna/main/modules/gradient90.png';
         ['gradientp45'] = 'https://raw.githubusercontent.com/portallol/luna/main/modules/gradient45.png';
@@ -66,7 +65,7 @@ local library = {
     open = false;
     opening = false;
     hasInit = false;
-    cheatname = startupArgs.cheatname or 'octohook';
+    cheatname = startupArgs.cheatname or 'templehook';
     gamename = startupArgs.gamename or 'universal';
     fileext = startupArgs.fileext or '.txt';
 }
@@ -75,51 +74,25 @@ library.themes = {
     {
         name = 'Default',
         theme = {
-            ["Accent"]                    = fromrgb(204, 45, 45);
-            ["Background"]                = fromrgb(18,18,18);
+            ["Accent"]                    = fromrgb(159, 115, 255);
+            ["Background"]                = fromrgb(23,23,23);
             ["Border"]                    = fromrgb(0,0,0);
             ["Border 1"]                  = fromrgb(60,60,60);
-            ["Border 2"]                  = fromrgb(18,18,18);
+            ["Border 2"]                  = fromrgb(23,23,23);
             ["Border 3"]                  = fromrgb(10,10,10);
             ["Primary Text"]              = fromrgb(255,255,255);
-            ["Group Background"]          = fromrgb(18,18,18);
-            ["Selected Tab Background"]   = fromrgb(18,18,18);
-            ["Unselected Tab Background"] = fromrgb(18,18,18);
+            ["Group Background"]          = fromrgb(23,23,23);
+            ["Selected Tab Background"]   = fromrgb(23,23,23);
+            ["Unselected Tab Background"] = fromrgb(23,23,23);
             ["Selected Tab Text"]         = fromrgb(245,245,245);
             ["Unselected Tab Text"]       = fromrgb(145,145,145);
-            ["Section Background"]        = fromrgb(18,18,18);
+            ["Section Background"]        = fromrgb(23,23,23);
             ["Option Text 1"]             = fromrgb(255,255,255);
             ["Option Text 2"]             = fromrgb(255,255,255);
             ["Option Text 3"]             = fromrgb(255,255,255);
             ["Option Border 1"]           = fromrgb(50,50,50);
             ["Option Border 2"]           = fromrgb(0,0,0);
             ["Option Background"]         = fromrgb(23,23,23);
-            ["Risky Text"]                = fromrgb(175, 21, 21);
-            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
-        }
-    },
-    {
-        name = 'Informant_V1',
-        theme = {
-            ['Accent']                    = fromrgb(103,89,179);
-            ['Background']                = fromrgb(22,22,31);
-            ['Border']                    = fromrgb(0,0,0);
-            ['Border 1']                  = fromrgb(50,50,50);
-            ['Border 2']                  = fromrgb(24,25,37);
-            ['Border 3']                  = fromrgb(10,10,10);
-            ['Primary Text']              = fromrgb(235,235,235);
-            ['Group Background']          = fromrgb(24,25,37);
-            ['Selected Tab Background']   = fromrgb(24,25,37);
-            ['Unselected Tab Background'] = fromrgb(22,22,31);
-            ['Selected Tab Text']         = fromrgb(245,245,245);
-            ['Unselected Tab Text']       = fromrgb(145,145,145);
-            ['Section Background']        = fromrgb(22,22,31);
-            ['Option Text 1']             = fromrgb(245,245,245);
-            ['Option Text 2']             = fromrgb(195,195,195);
-            ['Option Text 3']             = fromrgb(145,145,145);
-            ['Option Border 1']           = fromrgb(50,50,50);
-            ['Option Border 2']           = fromrgb(0,0,0);
-            ['Option Background']         = fromrgb(24,25,37);
             ["Risky Text"]                = fromrgb(175, 21, 21);
             ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
         }
@@ -177,31 +150,343 @@ library.themes = {
         }
     },
     {
-        name = 'Twitch',
+        name = 'Neverlose',
         theme = {
-            ['Accent']                    = fromrgb(169,112,255);
-            ['Background']                = fromrgb(14,14,14);
+            ['Accent']                    = fromrgb(39,157,213);
+            ['Background']                = fromrgb(9,9,13);
             ['Border']                    = fromrgb(0,0,0);
-            ['Border 1']                  = fromrgb(45,45,45);
-            ['Border 2']                  = fromrgb(31,31,35);
+            ['Border 1']                  = fromrgb(9,23,32);
+            ['Border 2']                  = fromrgb(9,9,13);
             ['Border 3']                  = fromrgb(10,10,10);
             ['Primary Text']              = fromrgb(235,235,235);
-            ['Group Background']          = fromrgb(31,31,35);
-            ['Selected Tab Background']   = fromrgb(31,31,35);
-            ['Unselected Tab Background'] = fromrgb(17,17,17);
-            ['Selected Tab Text']         = fromrgb(225,225,225);
-            ['Unselected Tab Text']       = fromrgb(160,170,175);
-            ['Section Background']        = fromrgb(17,17,17);
+            ['Group Background']          = fromrgb(9,9,13);
+            ['Selected Tab Background']   = fromrgb(10,58,83);
+            ['Unselected Tab Background'] = fromrgb(9,9,13);
+            ['Selected Tab Text']         = fromrgb(245,245,245);
+            ['Unselected Tab Text']       = fromrgb(145,145,145);
+            ['Section Background']        = fromrgb(0,12,21);
             ['Option Text 1']             = fromrgb(245,245,245);
             ['Option Text 2']             = fromrgb(195,195,195);
             ['Option Text 3']             = fromrgb(145,145,145);
-            ['Option Border 1']           = fromrgb(45,45,45);
+            ['Option Border 1']           = fromrgb(9,23,32);
             ['Option Border 2']           = fromrgb(0,0,0);
-            ['Option Background']         = fromrgb(24,24,27);
+            ['Option Background']         = fromrgb(9,9,13);
             ["Risky Text"]                = fromrgb(175, 21, 21);
             ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
         }
-    }
+    },
+    {
+        name = 'Onetap',
+        theme = {
+            ["Accent"]                    = fromrgb(248,175,18);
+            ["Background"]                = fromrgb(33,33,41);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(33,33,41);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(33,33,41);
+            ["Selected Tab Background"]   = fromrgb(23,23,31);
+            ["Unselected Tab Background"] = fromrgb(26,26,34);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(33,33,41);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(47,47,55);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(33,33,41);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Priv9',
+        theme = {
+            ['Accent']                    = fromrgb(20,72,55);
+            ['Background']                = fromrgb(20,72,55);
+            ['Border']                    = fromrgb(0,0,0);
+            ['Border 1']                  = fromrgb(20,72,55);
+            ['Border 2']                  = fromrgb(16,51,45);
+            ['Border 3']                  = fromrgb(25,50,50);
+            ['Primary Text']              = fromrgb(235,235,235);
+            ['Group Background']          = fromrgb(16,51,45);
+            ['Selected Tab Background']   = fromrgb(10,58,83);
+            ['Unselected Tab Background'] = fromrgb(16,51,45);
+            ['Selected Tab Text']         = fromrgb(245,245,245);
+            ['Unselected Tab Text']       = fromrgb(145,145,145);
+            ['Section Background']        = fromrgb(16,51,45);
+            ['Option Text 1']             = fromrgb(245,245,245);
+            ['Option Text 2']             = fromrgb(195,195,195);
+            ['Option Text 3']             = fromrgb(145,145,145);
+            ['Option Border 1']           = fromrgb(16,51,45);
+            ['Option Border 2']           = fromrgb(0,0,0);
+            ['Option Background']         = fromrgb(7,42,25);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Imgui',
+        theme = {
+            ["Accent"]                    = fromrgb(39,73,114);
+            ["Background"]                = fromrgb(21,22,23);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(36,36,36);
+            ["Border 2"]                  = fromrgb(21,22,23);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(21,22,23);
+            ["Selected Tab Background"]   = fromrgb(39,73,114);
+            ["Unselected Tab Background"] = fromrgb(21,22,23);
+            ["Selected Tab Text"]         = fromrgb(255,255,255);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(21,22,23);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(32,50,77);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(39,73,114);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'V3rmillion',
+        theme = {
+            ["Accent"]                    = fromrgb(207,23,31);
+            ["Background"]                = fromrgb(32,30,31);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(36,36,36);
+            ["Border 2"]                  = fromrgb(32,30,31);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,30,31);
+            ["Selected Tab Background"]   = fromrgb(207,23,31);
+            ["Unselected Tab Background"] = fromrgb(32,30,31);
+            ["Selected Tab Text"]         = fromrgb(255,255,255);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,30,31);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(32,30,31);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,30,31);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Pink',
+        theme = {
+            ["Accent"]                    = fromrgb(219, 136, 197);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Red',
+        theme = {
+            ["Accent"]                    = fromrgb(255, 38, 44);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Green',
+        theme = {
+            ["Accent"]                    = fromrgb(61, 254, 82);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Yellow',
+        theme = {
+            ["Accent"]                    = fromrgb(252, 250, 86);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Blue',
+        theme = {
+            ["Accent"]                    = fromrgb(86, 132, 252);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Purple',
+        theme = {
+            ["Accent"]                    = fromrgb(200, 75, 244);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Orange',
+        theme = {
+            ["Accent"]                    = fromrgb(255, 176, 60);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
+    {
+        name = 'Cyan',
+        theme = {
+            ["Accent"]                    = fromrgb(93, 230, 228);
+            ["Background"]                = fromrgb(32,32,32);
+            ["Border"]                    = fromrgb(0,0,0);
+            ["Border 1"]                  = fromrgb(60,60,60);
+            ["Border 2"]                  = fromrgb(32,32,32);
+            ["Border 3"]                  = fromrgb(10,10,10);
+            ["Primary Text"]              = fromrgb(255,255,255);
+            ["Group Background"]          = fromrgb(32,32,32);
+            ["Selected Tab Background"]   = fromrgb(35,35,35);
+            ["Unselected Tab Background"] = fromrgb(32,32,32);
+            ["Selected Tab Text"]         = fromrgb(245,245,245);
+            ["Unselected Tab Text"]       = fromrgb(145,145,145);
+            ["Section Background"]        = fromrgb(32,32,32);
+            ["Option Text 1"]             = fromrgb(255,255,255);
+            ["Option Text 2"]             = fromrgb(255,255,255);
+            ["Option Text 3"]             = fromrgb(255,255,255);
+            ["Option Border 1"]           = fromrgb(50,50,50);
+            ["Option Border 2"]           = fromrgb(0,0,0);
+            ["Option Background"]         = fromrgb(32,32,32);
+            ["Risky Text"]                = fromrgb(175, 21, 21);
+            ["Risky Text Enabled"]        = fromrgb(255, 41, 41);
+        }
+    },
 }
 
 local blacklistedKeys = {
@@ -1350,14 +1635,14 @@ function library:init()
 
                 objs.sat1 = utility:Draw('Image', {
                     Size = newUDim2(1,0,1,0);
-                    Data = syn.crypt.base64.decode"iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkCAQAAADURZm+AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflBwwSLzK3wl3KAAADrElEQVR42u3TORLCMBBFwT+6/50hMqXSZgonBN0BWCDGYPwqeSWVZPWYVHd0Pc5H86v9areu4Sz9u7XZXT/vvtZtu6dtJtYw525iGya05afnWW17ltPE8fzfTZy/yf3vmCes59xf0Sf/42l3lnvGOyyH+y/bo/X689wCPCYkEBIICYQECAmEBEICIQFCAiGBkEBIgJBASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZAAIYGQQEggJEBIICQQEggJEBIICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIICRASCAmEBAgJhARCAiEBQgIhgZBASICQQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQQEguAQgJhARCAoQEQgIhgZAAIYGQQEggJEBIICQQEggJEBIICYQEQgKEBEICIYGQACGBkEBIgJBASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZBASICQQEggJBASICQQEggJhAQICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIICRASCAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQQEiAkEBIICQQEiAkEBIICYQECAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASCAkQEggJhARCAoQEQgIhgZAAIYGQQEggJEBIICQQEiAkEBIICYQECAmEBEICIQFCAiGBkEBIgJBASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZAAIYGQQEggJEBIICQQEggJEBIICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZBASICQQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQACGBkEBIICRASCAkEBIICRASCAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASCAkQEggJhAQICYQEQgIhAUICIYGQQEiAkEBIICQQEiAkEBIICYQECAmEBEICIQFCAiGBkEBILgEICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIICRASCAmEBEIChARCAiGBkAAhgZBASICQQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQQEiAkEBIICQQEiAkEBIICYQECAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASCAkQEggJhARCAoQEQgIhgZAAIYGQQEggJEBIICQQEiAkEBL8lzft9AVFFzN+ywAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wNy0xMlQxODo0Nzo1MCswMDowMIxlM90AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDctMTJUMTg6NDc6NTArMDA6MDD9OIthAAAAAElFTkSuQmCC";
+                    Data = crypt.base64.decode"iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkCAQAAADURZm+AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflBwwSLzK3wl3KAAADrElEQVR42u3TORLCMBBFwT+6/50hMqXSZgonBN0BWCDGYPwqeSWVZPWYVHd0Pc5H86v9areu4Sz9u7XZXT/vvtZtu6dtJtYw525iGya05afnWW17ltPE8fzfTZy/yf3vmCes59xf0Sf/42l3lnvGOyyH+y/bo/X689wCPCYkEBIICYQECAmEBEICIQFCAiGBkEBIgJBASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZAAIYGQQEggJEBIICQQEggJEBIICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIICRASCAmEBAgJhARCAiEBQgIhgZBASICQQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQQEguAQgJhARCAoQEQgIhgZAAIYGQQEggJEBIICQQEggJEBIICYQEQgKEBEICIYGQACGBkEBIgJBASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZBASICQQEggJBASICQQEggJhAQICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIICRASCAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQQEiAkEBIICQQEiAkEBIICYQECAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASCAkQEggJhARCAoQEQgIhgZAAIYGQQEggJEBIICQQEiAkEBIICYQECAmEBEICIQFCAiGBkEBIgJBASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZAAIYGQQEggJEBIICQQEggJEBIICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIgJBASCAmEBAgJhARCAiEBQgIhgZBASICQQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQACGBkEBIICRASCAkEBIICRASCAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASCAkQEggJhAQICYQEQgIhAUICIYGQQEiAkEBIICQQEiAkEBIICYQECAmEBEICIQFCAiGBkEBILgEICYQEQgKEBEICIYGQACGBkEBIICRASCAkEBIICRASCAmEBEIChARCAiGBkAAhgZBASICQQEggJBASICQQEggJhAQICYQEQgIhAUICIYGQQEiAkEBIICQQEiAkEBIICYQECAmEBEIChARCAiGBkAAhgZBASCAkQEggJBASCAkQEggJhARCAoQEQgIhgZAAIYGQQEggJEBIICQQEiAkEBL8lzft9AVFFzN+ywAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wNy0xMlQxODo0Nzo1MCswMDowMIxlM90AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDctMTJUMTg6NDc6NTArMDA6MDD9OIthAAAAAElFTkSuQmCC";
                     ZIndex = z+3;
                     Parent = objs.mainColor;
                 })
 
                 objs.sat2 = utility:Draw('Image', {
                     Size = newUDim2(1,0,1,0);
-                    Data = syn.crypt.base64.decode"iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkCAQAAADURZm+AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflBwwSLyBEeyyCAAAD4klEQVR42u3YwQnAQAhFQTek/5pz9eBtEYzMlBD4PDcRADDBieMjwK3HJwBDghFepx0oEhgSOO0ARQJDAqcdKBJgSGBI4I0EhgQ47cCQwJDAGwlQJDAkcNqBIgGKBIoEhgROO0CRQJFAkQBDAqcdGBI47QBFAkUCQwKnHaBIoEigSKBIgCKBIYHTDhQJUCQwJHDagSIBigSGBE47UCRAkcCQwGkHKBIoEigSGBLgtANDAkMCbyTAkMBpB4oEigQoEhgSOO1AkQBDAqcdKBIoEqBIYEjgtANFUiRQJFAkMCTAaQeKBIoEigQYEjjtQJFAkQBFAkMCpx0oEmBI4LQDRQJFAhQJDAmcdqBIgCKBIoEhAU47UCRQJFAkwJDAaQeKBIYEOO1AkUCRYHuRTAmcduC0A0UCFAkUCQwJnHaAIoEigSKBIQFOO2gvkimBIoE3EhgS4LQDRQJDAqcdoEigSKBIYEiAIYEhwXx+NoAigSGB0w5QJDAkMCQwJKDiZwMoEhgSOO0ARQJFgnlFMiVw2oHTDhQJUCRQJDAkcNoBVZFMCRQJvJHAkACnHSgSKBIoElANSZPAaQdOOzAkwGkHigSGBIYEGBK08LMBFAkUCRQJMCQwJDAkWMjPBlAkMCRw2gG5SKYEigTeSGBIgNMOFAkMCQwJMCRo4WcDKBIYEjjtgFwkUwJFAm8kMCTAaQeKBIoEigRUQ9IkcNqB0w4MCXDagSKBIsHCIpkSOO3AaQeKBCgSKBIYEhgSYEjQws8GUCQwJHDaAblIpgSKBN5IYEiA0w4UCQwJDAkwJGjhZwMoEhgSOO0ARQJDAkMCQwIqfjaAIoEigSIBhgROO5hXJFMCpx047UCRAEUCRQJDAqcdUBXJlECRwBsJDAlw2oEigSKBIgGGBIYEhgSL+dkAigSGBE47QJHAkMBpB4oEGBIYEhgSrOZnAygSKBIoEmBI4LQDRQJFAhQJDAmcdrC8SKYEigTeSGBIgNMOFAkMCZx2gCKBIoEigSEBTjtQJFAkUCTAkMBpB4oEigQoEhgSOO1AkQBDAqcdKBKgSKBIYEjgtAMUCRQJFAkMCXDagSKBIoEiAYYETjtQJFAkQJHAkMBpB4oEGBI47UCRQJEARQJDAqcdoEigSGBI4LQDFAkUCRQJFAkwJHDagSKBIQFOOzAkMCTwRgIMCZx2oEigSIAigSKBIYHTzkcARQJFAkMCnHZgSGBI4I0EGBI47UCRQJEAQwKnHSgSKBKgSGBI4LQDRQIUCRQJDAmcdoAigSGB0w5QJFAkUCQwJMBpB4oEhgROO0CRwJDAkMAbCVAkMCT4gw/reQYigE05fAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wNy0xMlQxODo0NzozMiswMDowMN2VK3MAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDctMTJUMTg6NDc6MzIrMDA6MDCsyJPPAAAAAElFTkSuQmCC";
+                    Data = crypt.base64.decode"iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkCAQAAADURZm+AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQflBwwSLyBEeyyCAAAD4klEQVR42u3YwQnAQAhFQTek/5pz9eBtEYzMlBD4PDcRADDBieMjwK3HJwBDghFepx0oEhgSOO0ARQJDAqcdKBJgSGBI4I0EhgQ47cCQwJDAGwlQJDAkcNqBIgGKBIoEhgROO0CRQJFAkQBDAqcdGBI47QBFAkUCQwKnHaBIoEigSKBIgCKBIYHTDhQJUCQwJHDagSIBigSGBE47UCRAkcCQwGkHKBIoEigSGBLgtANDAkMCbyTAkMBpB4oEigQoEhgSOO1AkQBDAqcdKBIoEqBIYEjgtANFUiRQJFAkMCTAaQeKBIoEigQYEjjtQJFAkQBFAkMCpx0oEmBI4LQDRQJFAhQJDAmcdqBIgCKBIoEhAU47UCRQJFAkwJDAaQeKBIYEOO1AkUCRYHuRTAmcduC0A0UCFAkUCQwJnHaAIoEigSKBIQFOO2gvkimBIoE3EhgS4LQDRQJDAqcdoEigSKBIYEiAIYEhwXx+NoAigSGB0w5QJDAkMCQwJKDiZwMoEhgSOO0ARQJFgnlFMiVw2oHTDhQJUCRQJDAkcNoBVZFMCRQJvJHAkACnHSgSKBIoElANSZPAaQdOOzAkwGkHigSGBIYEGBK08LMBFAkUCRQJMCQwJDAkWMjPBlAkMCRw2gG5SKYEigTeSGBIgNMOFAkMCQwJMCRo4WcDKBIYEjjtgFwkUwJFAm8kMCTAaQeKBIoEigRUQ9IkcNqB0w4MCXDagSKBIsHCIpkSOO3AaQeKBCgSKBIYEhgSYEjQws8GUCQwJHDaAblIpgSKBN5IYEiA0w4UCQwJDAkwJGjhZwMoEhgSOO0ARQJDAkMCQwIqfjaAIoEigSIBhgROO5hXJFMCpx047UCRAEUCRQJDAqcdUBXJlECRwBsJDAlw2oEigSKBIgGGBIYEhgSL+dkAigSGBE47QJHAkMBpB4oEGBIYEhgSrOZnAygSKBIoEmBI4LQDRQJFAhQJDAmcdrC8SKYEigTeSGBIgNMOFAkMCZx2gCKBIoEigSEBTjtQJFAkUCTAkMBpB4oEigQoEhgSOO1AkQBDAqcdKBKgSKBIYEjgtAMUCRQJFAkMCXDagSKBIoEiAYYETjtQJFAkQJHAkMBpB4oEGBI47UCRQJEARQJDAqcdoEigSGBI4LQDFAkUCRQJFAkwJHDagSKBIQFOOzAkMCTwRgIMCZx2oEigSIAigSKBIYHTzkcARQJFAkMCnHZgSGBI4I0EGBI47UCRQJEAQwKnHSgSKBKgSGBI4LQDRQIUCRQJDAmcdoAigSGB0w5QJFAkUCQwJMBpB4oEhgROO0CRwJDAkMAbCVAkMCT4gw/reQYigE05fAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wNy0xMlQxODo0NzozMiswMDowMN2VK3MAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDctMTJUMTg6NDc6MzIrMDA6MDCsyJPPAAAAAElFTkSuQmCC";
                     ZIndex = z+4;
                     Parent = objs.mainColor;
                 })
@@ -2125,7 +2410,6 @@ function library:init()
                             if not nocallback then
                                 self.callback(bool);
                             end
-
                         end
                     end
 
@@ -2347,7 +2631,7 @@ function library:init()
                             local display = bind.state; if bind.invertindicator then display = not bind.state; end
                             bind.indicatorValue:SetEnabled(display and not bind.noindicator);
                             bind.indicatorValue:SetKey((bind.text == nil or bind.text == '') and (bind.flag == nil and 'unknown' or bind.flag) or bind.text); -- this is so dumb
-                            bind.indicatorValue:SetValue('[Always]');
+                            bind.indicatorValue:SetValue('[None]');
                         end
     
                         --- Create Objects ---
@@ -2425,7 +2709,7 @@ function library:init()
                             self.indicatorValue:SetKey((self.text == nil or self.text == '') and (self.flag == nil and 'unknown' or self.flag) or self.text); -- this is so dumb
                             self.indicatorValue:SetValue('['..keyName:upper()..']');
                             if self.bind == 'none' then
-                                self.indicatorValue:SetValue('[Always]');
+                                self.indicatorValue:SetValue('[None]');
                             end
                             self.objects.keyText.ThemeColor = self.objects.holder.Hover and 'Accent' or 'Option Text 3';
                         end
@@ -3887,7 +4171,9 @@ function library:init()
                         if apply then
                             box:SetInput(input);
                         end
-                        c:Disconnect();
+                        if c then
+                            c:Disconnect();
+                        end
                     end
 
                     tooltip(box);
@@ -4486,11 +4772,7 @@ function library:init()
         self.watermark = {
             objects = {};
             text = {
-                {"informant.wtf", true},
-                {"V"..getgenv().Config.Version, true},
-                {getgenv().luaguardvars.DiscordName, true},
-                {'0 fps', true},
-                {'0ms', true},
+                {"templehook v2.0", true},
             };
             lock = 'custom';
             position = newUDim2(0,0,0,0);
@@ -4503,9 +4785,6 @@ function library:init()
                 local date = {os.date('%b',os.time()), os.date('%d',os.time()), os.date('%Y',os.time())}
                 local daySuffix = math.floor(date[2]%10)
                 date[2] = date[2]..(daySuffix == 1 and 'st' or daySuffix == 2 and 'nd' or daySuffix == 3 and 'rd' or 'th')
-
-                self.text[4][1] = library.stats.fps..' fps'
-                self.text[5][1] = floor(library.stats.ping)..'ms'
 
                 local text = {};
                 for _,v in next, self.text do
@@ -4585,11 +4864,6 @@ function library:init()
 
     local lasttick = tick();
     utility:Connection(runservice.RenderStepped, function(step)
-        library.stats.fps = floor(1/step)
-        library.stats.ping = stats.Network.ServerStatsItem["Data Ping"]:GetValue()
-        library.stats.sendkbps = stats.DataSendKbps
-        library.stats.receivekbps = stats.DataReceiveKbps
-
         if (tick()-lasttick)*1000 > library.watermark.refreshrate then
             lasttick = tick()
             library.watermark:Update()
@@ -4615,14 +4889,6 @@ function library:CreateSettingsTab(menu)
     local settingsTab = menu:AddTab('Settings', 999);
     local configSection = settingsTab:AddSection('Config', 2);
     local mainSection = settingsTab:AddSection('Main', 1);
-    local creditsSection = settingsTab:AddSection('Credits', 2);
-    creditsSection:AddSeparator({text = 'Owners/Developers'});
-    creditsSection:AddText({text = "xz#1111"})
-    creditsSection:AddText({text = "goof#1000"})
-    creditsSection:AddSeparator({text = 'Helpers'});
-    creditsSection:AddText({text = "encode#9999"})
-    creditsSection:AddText({text = "Vault#5434"})
-
 
     configSection:AddBox({text = 'Config Name', flag = 'configinput'})
     configSection:AddList({text = 'Config', flag = 'selectedconfig'})
@@ -4679,22 +4945,6 @@ function library:CreateSettingsTab(menu)
             actionservice:UnbindAction('FreezeMovement');
         end
     end})
-
-    mainSection:AddButton({text = 'Join Discord', flag = 'joindiscord', confirm = true, callback = function()
-        local res = syn.request({
-            Url = 'http://127.0.0.1:6463/rpc?v=1',
-            Method = 'POST',
-            Headers = {
-                ['Content-Type'] = 'application/json',
-                Origin = 'https://discord.com'
-            },
-            Body = game:GetService('HttpService'):JSONEncode({
-                cmd = 'INVITE_BROWSER',
-                nonce = game:GetService('HttpService'):GenerateGUID(false),
-                args = {code = getgenv().Config.Invite}
-            })
-        })
-    end})
     
     mainSection:AddButton({text = 'Copy Discord', flag = 'copydiscord', callback = function()
         setclipboard('https://discord.gg/'..getgenv().Config.Invite)
@@ -4704,11 +4954,42 @@ function library:CreateSettingsTab(menu)
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId);
     end})
 
-    mainSection:AddButton({text = 'Copy Join Script', callback = function()
+    mainSection:AddButton({text = 'Server Hop', confirm = true, callback = function()
+        local FoundServers = {}
+        local Request = request({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
+        local Body = game:GetService("HttpService"):JSONDecode(Request.Body)
+    
+        if Body and Body.data then
+            for i,v in ipairs(Body.data) do
+                if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
+                    table.insert(FoundServers, 1, v.id)
+                end
+            end
+        end
+    
+        if #FoundServers > 0 then
+            library:SendNotification("Server found! Teleporting...", 5, Color3.new(0,255,0))
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, FoundServers[math.random(1, #FoundServers)], localplayer)
+            task.wait(1)
+            Unload()
+        else
+            return library:SendNotification("Could not find a valid server!", 5, Color3.new(255, 0, 0))
+        end
+    end})
+
+    mainSection:AddButton({text = 'Copy JS Join Script', callback = function()
+        setclipboard(([[Roblox.GameLauncher.joinGameInstance(%s, "%s")]]):format(game.PlaceId, game.JobId))
+    end})
+
+    mainSection:AddButton({text = 'Copy Lua Join Script', callback = function()
         setclipboard(([[game:GetService("TeleportService"):TeleportToPlaceInstance(%s, "%s")]]):format(game.PlaceId, game.JobId))
     end})
 
     mainSection:AddButton({text = 'Unload', confirm = true, callback = function()
+        if shared.Temple_Enviroment then
+            shared.Temple_Enviroment.Unloaded = true
+        end
+        task.wait()
         library:Unload();
     end})
 
@@ -4716,6 +4997,7 @@ function library:CreateSettingsTab(menu)
     mainSection:AddToggle({text = 'Keybind Indicator', flag = 'keybind_indicator', callback = function(bool)
         library.keyIndicator:SetEnabled(bool);
     end})
+
     mainSection:AddSlider({text = 'Position X', flag = 'keybind_indicator_x', min = 0, max = 100, increment = .1, value = .5, callback = function()
         library.keyIndicator:SetPosition(newUDim2(library.flags.keybind_indicator_x / 100, 0, library.flags.keybind_indicator_y / 100, 0));    
     end});
@@ -4757,5 +5039,4 @@ function library:CreateSettingsTab(menu)
     return settingsTab;
 end
 
-getgenv().library = library
 return library
