@@ -1,7 +1,10 @@
-getgenv().Config = {
-	Invite = "unknown",
-	Version = "0",
-}
+--[[
+Octohook ui lib informant version
+Developed by liam#4567
+Edited by xz#1111
+]]
+
+-- // Load
 
 local startupArgs = ({...})[1] or {}
 
@@ -16,7 +19,6 @@ end
 local function gs(a)
     return game:GetService(a)
 end
-
 
 -- // Variables
 local players, http, runservice, inputservice, tweenService, stats, actionservice = gs('Players'), gs('HttpService'), gs('RunService'), gs('UserInputService'), gs('TweenService'), gs('Stats'), gs('ContextActionService')
@@ -68,9 +70,9 @@ local library = {
     open = false;
     opening = false;
     hasInit = false;
-    cheatname = startupArgs.cheatname or 'test';
-    gamename = startupArgs.gamename or 'safada';
-    fileext = startupArgs.fileext or '.txt;
+    cheatname = startupArgs.cheatname or 'octohook';
+    gamename = startupArgs.gamename or 'universal';
+    fileext = startupArgs.fileext or '.txt';
 }
 
 library.themes = {
@@ -2127,6 +2129,7 @@ function library:init()
                             if not nocallback then
                                 self.callback(bool);
                             end
+
                         end
                     end
 
@@ -2348,7 +2351,7 @@ function library:init()
                             local display = bind.state; if bind.invertindicator then display = not bind.state; end
                             bind.indicatorValue:SetEnabled(display and not bind.noindicator);
                             bind.indicatorValue:SetKey((bind.text == nil or bind.text == '') and (bind.flag == nil and 'unknown' or bind.flag) or bind.text); -- this is so dumb
-                            bind.indicatorValue:SetValue('[None]');
+                            bind.indicatorValue:SetValue('[Always]');
                         end
     
                         --- Create Objects ---
@@ -2426,7 +2429,7 @@ function library:init()
                             self.indicatorValue:SetKey((self.text == nil or self.text == '') and (self.flag == nil and 'unknown' or self.flag) or self.text); -- this is so dumb
                             self.indicatorValue:SetValue('['..keyName:upper()..']');
                             if self.bind == 'none' then
-                                self.indicatorValue:SetValue('[None]');
+                                self.indicatorValue:SetValue('[Always]');
                             end
                             self.objects.keyText.ThemeColor = self.objects.holder.Hover and 'Accent' or 'Option Text 3';
                         end
@@ -3888,9 +3891,7 @@ function library:init()
                         if apply then
                             box:SetInput(input);
                         end
-                        if c then
-                            c:Disconnect();
-                        end
+                        c:Disconnect();
                     end
 
                     tooltip(box);
@@ -4489,7 +4490,11 @@ function library:init()
         self.watermark = {
             objects = {};
             text = {
-                {"templehook v2.0", true},
+                {"informant.wtf", true},
+                {"V"..getgenv().Config.Version, true},
+                {getgenv().luaguardvars.DiscordName, true},
+                {'0 fps', true},
+                {'0ms', true},
             };
             lock = 'custom';
             position = newUDim2(0,0,0,0);
@@ -4502,6 +4507,9 @@ function library:init()
                 local date = {os.date('%b',os.time()), os.date('%d',os.time()), os.date('%Y',os.time())}
                 local daySuffix = math.floor(date[2]%10)
                 date[2] = date[2]..(daySuffix == 1 and 'st' or daySuffix == 2 and 'nd' or daySuffix == 3 and 'rd' or 'th')
+
+                self.text[4][1] = library.stats.fps..' fps'
+                self.text[5][1] = floor(library.stats.ping)..'ms'
 
                 local text = {};
                 for _,v in next, self.text do
@@ -4581,6 +4589,11 @@ function library:init()
 
     local lasttick = tick();
     utility:Connection(runservice.RenderStepped, function(step)
+        library.stats.fps = floor(1/step)
+        library.stats.ping = stats.Network.ServerStatsItem["Data Ping"]:GetValue()
+        library.stats.sendkbps = stats.DataSendKbps
+        library.stats.receivekbps = stats.DataReceiveKbps
+
         if (tick()-lasttick)*1000 > library.watermark.refreshrate then
             lasttick = tick()
             library.watermark:Update()
@@ -4606,6 +4619,14 @@ function library:CreateSettingsTab(menu)
     local settingsTab = menu:AddTab('Settings', 999);
     local configSection = settingsTab:AddSection('Config', 2);
     local mainSection = settingsTab:AddSection('Main', 1);
+    local creditsSection = settingsTab:AddSection('Credits', 2);
+    creditsSection:AddSeparator({text = 'Owners/Developers'});
+    creditsSection:AddText({text = "xz#1111"})
+    creditsSection:AddText({text = "goof#1000"})
+    creditsSection:AddSeparator({text = 'Helpers'});
+    creditsSection:AddText({text = "encode#9999"})
+    creditsSection:AddText({text = "Vault#5434"})
+
 
     configSection:AddBox({text = 'Config Name', flag = 'configinput'})
     configSection:AddList({text = 'Config', flag = 'selectedconfig'})
@@ -4662,6 +4683,10 @@ function library:CreateSettingsTab(menu)
             actionservice:UnbindAction('FreezeMovement');
         end
     end})
+
+    mainSection:AddButton({text = 'Join Discord', flag = 'joindiscord', confirm = true, callback = function()
+	print("unknown")
+    end})
     
     mainSection:AddButton({text = 'Copy Discord', flag = 'copydiscord', callback = function()
         setclipboard('https://discord.gg/'..getgenv().Config.Invite)
@@ -4671,42 +4696,11 @@ function library:CreateSettingsTab(menu)
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId);
     end})
 
-    mainSection:AddButton({text = 'Server Hop', confirm = true, callback = function()
-        local FoundServers = {}
-        local Request = request({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
-        local Body = game:GetService("HttpService"):JSONDecode(Request.Body)
-    
-        if Body and Body.data then
-            for i,v in ipairs(Body.data) do
-                if type(v) == "table" and tonumber(v.playing) and tonumber(v.maxPlayers) and v.playing < v.maxPlayers and v.id ~= game.JobId then
-                    table.insert(FoundServers, 1, v.id)
-                end
-            end
-        end
-    
-        if #FoundServers > 0 then
-            library:SendNotification("Server found! Teleporting...", 5, Color3.new(0,255,0))
-            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, FoundServers[math.random(1, #FoundServers)], localplayer)
-            task.wait(1)
-            Unload()
-        else
-            return library:SendNotification("Could not find a valid server!", 5, Color3.new(255, 0, 0))
-        end
-    end})
-
-    mainSection:AddButton({text = 'Copy JS Join Script', callback = function()
-        setclipboard(([[Roblox.GameLauncher.joinGameInstance(%s, "%s")]]):format(game.PlaceId, game.JobId))
-    end})
-
-    mainSection:AddButton({text = 'Copy Lua Join Script', callback = function()
+    mainSection:AddButton({text = 'Copy Join Script', callback = function()
         setclipboard(([[game:GetService("TeleportService"):TeleportToPlaceInstance(%s, "%s")]]):format(game.PlaceId, game.JobId))
     end})
 
     mainSection:AddButton({text = 'Unload', confirm = true, callback = function()
-        if shared.Temple_Enviroment then
-            shared.Temple_Enviroment.Unloaded = true
-        end
-        task.wait()
         library:Unload();
     end})
 
@@ -4714,7 +4708,6 @@ function library:CreateSettingsTab(menu)
     mainSection:AddToggle({text = 'Keybind Indicator', flag = 'keybind_indicator', callback = function(bool)
         library.keyIndicator:SetEnabled(bool);
     end})
-
     mainSection:AddSlider({text = 'Position X', flag = 'keybind_indicator_x', min = 0, max = 100, increment = .1, value = .5, callback = function()
         library.keyIndicator:SetPosition(newUDim2(library.flags.keybind_indicator_x / 100, 0, library.flags.keybind_indicator_y / 100, 0));    
     end});
@@ -4756,4 +4749,5 @@ function library:CreateSettingsTab(menu)
     return settingsTab;
 end
 
+getgenv().library = library
 return library
